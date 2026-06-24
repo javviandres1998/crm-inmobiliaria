@@ -24,19 +24,32 @@ async function sbFetch(method, table, body, filter) {
 
 async function loadData() {
   try {
-    const [l, v, p, f] = await Promise.all([
-      sbFetch('GET', 'inmob_leads', null, 'order=created_at.desc'),
-      sbFetch('GET', 'inmob_visitas', null, 'order=fecha.asc,hora.asc'),
-      sbFetch('GET', 'inmob_propiedades', null, 'order=created_at.desc').catch(() => []),
-      sbFetch('GET', 'inmob_facturas', null, 'order=fecha_emision.desc').catch(() => [])
+    const [l, v, p, f, vac] = await Promise.all([
+      sbFetch('GET', 'inmob_leads',      null, 'order=created_at.desc'),
+      sbFetch('GET', 'inmob_visitas',    null, 'order=fecha.asc,hora.asc'),
+      sbFetch('GET', 'inmob_propiedades',null, 'order=created_at.desc').catch(() => []),
+      sbFetch('GET', 'inmob_facturas',   null, 'order=fecha_emision.desc').catch(() => []),
+      sbFetch('GET', 'inmob_vacaciones', null, 'order=created_at.desc').catch(() => [])
     ]);
+
     leads = Array.isArray(l) ? l : [];
     const idsReales = leads.map(l => l.id);
-    const demoFiltrados = DEMO_VISITAS.filter(d => !idsReales.includes(d.id));
-    leads = [...leads, ...demoFiltrados];
+    leads = [...leads, ...[...DEMO_VISITAS, ...DEMO_LEADS].filter(d => !idsReales.includes(d.id))];
+
     visitas = v || [];
-    propiedades = p || [];
-    facturas = f || [];
+
+    propiedades = Array.isArray(p) ? p : [];
+    const idsRealProp = propiedades.map(p => p.id);
+    propiedades = [...propiedades, ...DEMO_PROPIEDADES.filter(d => !idsRealProp.includes(d.id))];
+
+    facturas = Array.isArray(f) ? f : [];
+    const idsRealFact = facturas.map(f => f.id);
+    facturas = [...facturas, ...DEMO_FACTURAS.filter(d => !idsRealFact.includes(d.id))];
+
+    vacaciones = Array.isArray(vac) ? vac : [];
+    const idsRealVac = vacaciones.map(v => v.id);
+    vacaciones = [...vacaciones, ...DEMO_VACACIONES.filter(d => !idsRealVac.includes(d.id))];
+
     renderStats();
     renderView();
   } catch (e) {

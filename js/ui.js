@@ -29,6 +29,69 @@ function renderView() {
   if (view === 'vacaciones') { renderVacaciones(); return; }
 }
 
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const isCollapsed = sb.classList.toggle('collapsed');
+  localStorage.setItem('crm-sidebar', isCollapsed ? 'collapsed' : 'open');
+}
+
+const sb = document.getElementById('sidebar');
+if (sb) {
+  sb.addEventListener('mouseenter', () => {
+    if (sb.classList.contains('collapsed') && window.innerWidth > 768) {
+      sb.classList.add('hover-open');
+    }
+  });
+
+  sb.addEventListener('mouseleave', () => {
+    if (window.innerWidth > 768) {
+      sb.classList.remove('hover-open');
+    }
+  });
+}
+
+(function(){
+  const saved = localStorage.getItem('crm-sidebar');
+  const sb = document.getElementById('sidebar');
+  if (sb && saved === 'collapsed') {
+    sb.classList.add('collapsed');
+  }
+})();
+
+function openMobileSidebar() {
+  document.getElementById('sidebar').classList.add('mobile-open');
+  document.getElementById('sidebar-overlay').classList.add('visible');
+}
+
+function closeMobileSidebar() {
+  document.getElementById('sidebar').classList.remove('mobile-open');
+  document.getElementById('sidebar-overlay').classList.remove('visible');
+}
+
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (window.innerWidth <= 768) closeMobileSidebar();
+  });
+});
+
+function toggleTheme() {
+  const isDay = document.body.classList.toggle('day');
+  localStorage.setItem('dayMode', isDay);
+  document.getElementById('theme-icon').textContent  = isDay ? '🌙' : '☀️';
+  document.getElementById('theme-label').textContent = isDay ? ' Modo noche' : ' Modo día';
+}
+
+(function initTheme() {
+  const isDay = localStorage.getItem('dayMode') === 'true';
+  if (isDay) {
+    document.body.classList.add('day');
+    const icon  = document.getElementById('theme-icon');
+    const label = document.getElementById('theme-label');
+    if (icon)  icon.textContent  = '🌙';
+    if (label) label.textContent = ' Modo noche';
+  }
+})();
+
 function renderStats() {
   const hoy = new Date().toISOString().slice(0,10);
   const enProceso = leads.filter(l => !['Cerrado ✓','Perdido ✗'].includes(l.estado)).length;

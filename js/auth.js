@@ -102,7 +102,7 @@ function sendRecoveryEmail(email, user) {
 
 function showCRM() {
   document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('crm-app').style.display      = 'block';
+  document.getElementById('crm-app').style.display      = 'flex';
 }
 
 function doLogout() {
@@ -113,5 +113,5 @@ function doLogout() {
 function updateUserInfo() {
   const nombre = sessionStorage.getItem('crm-nombre') || sessionStorage.getItem('crm-user');
   const role   = sessionStorage.getItem('crm-role');
-  document.getElementById('user-info').textContent = '👤 ' + nombre + ' · ' + role;
+  document.getElementById('user-info').textContent = nombre + ' · ' + role;
 }

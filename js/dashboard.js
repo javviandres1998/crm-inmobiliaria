@@ -31,11 +31,12 @@ function renderDashboard() {
     <div class="dash-row">
       <div class="dash-panel">
         <h3>Funnel de Ventas</h3>
-        <div class="funnel">${stageCounts.map(({s,n})=>`
-          <div class="funnel-row">
-            <span class="funnel-lbl">${esc(s)}</span>
-            <div class="funnel-bar-wrap">
-              <div class="funnel-bar" style="width:${Math.round(n/maxN*100)}%">${n}</div>
+        <div>${stageCounts.map(({s,n})=>`
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <div style="width:120px;font-size:13px;color:var(--text-muted);flex-shrink:0">${esc(s)}</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text-primary);width:24px;text-align:right;flex-shrink:0">${n}</div>
+            <div style="flex:1;background:var(--border);border-radius:4px;height:18px;overflow:hidden">
+              <div style="height:100%;border-radius:4px;background:var(--accent);width:${Math.round(n/maxN*100)}%;transition:width .4s ease"></div>
             </div>
           </div>`).join('')}
         </div>

@@ -43,6 +43,24 @@ async function saveForm(e) {
     presupuesto: f.presupuesto.value ? parseFloat(f.presupuesto.value) : null,
     zona: f.zona.value.trim() || null
   };
+  const fechaVisita = document.querySelector('[name="fecha_visita"]')?.value;
+  const agenteVal   = document.querySelector('[name="agente"]')?.value?.toLowerCase();
+
+  if (fechaVisita && agenteVal) {
+    const diaVisita = new Date(fechaVisita);
+    const bloqueado = vacaciones.some(v => {
+      if (v.estado !== 'Aprobada') return false;
+      if (!v.usuario || v.usuario.toLowerCase().replace(' ','') !== agenteVal.replace(' ','')) return false;
+      const ini = new Date(v.fecha_inicio);
+      const fin = new Date(v.fecha_fin);
+      return diaVisita >= ini && diaVisita <= fin;
+    });
+    if (bloqueado) {
+      toast('⚠️ El agente está de vacaciones en esa fecha', '#EF4444');
+      return;
+    }
+  }
+
   try {
     if (editId) {
       await sbFetch('PATCH', 'inmob_leads', body, `id=eq.${editId}`);
