@@ -46,9 +46,3 @@ const DEMO_FACTURAS = [
   { id:'df9',  numero:'FAC-2026-009', fecha_emision:'2026-05-10', cliente_nombre:'Roberto Fernández', cliente_nif:'90123456I', concepto:'Gestión',                 propiedad_ref:'REF-2024-009', base:450,  iva:21, total:544.50,  estado:'Borrador', forma_pago:'Transferencia', created_at:'2026-05-10T00:00:00Z' },
   { id:'df10', numero:'FAC-2026-010', fecha_emision:'2026-05-28', cliente_nombre:'Nuria Soler',       cliente_nif:'01234567J', concepto:'Honorarios por venta',    propiedad_ref:'REF-2024-010', base:6300, iva:21, total:7623,    estado:'Emitida', forma_pago:'Transferencia', created_at:'2026-05-28T00:00:00Z' },
 ];
-
-const DEMO_VACACIONES = [
-  { id:'dv1', usuario:'agente1', nombre:'Agente 1', fecha_inicio:'2026-07-01', fecha_fin:'2026-07-14', motivo:'Vacaciones de verano', estado:'Pendiente', created_at:'2026-06-10T00:00:00Z' },
-  { id:'dv2', usuario:'agente2', nombre:'Agente 2', fecha_inicio:'2026-08-01', fecha_fin:'2026-08-07', motivo:'Viaje familiar',       estado:'Pendiente', created_at:'2026-06-12T00:00:00Z' },
-  { id:'dv3', usuario:'agente1', nombre:'Agente 1', fecha_inicio:'2026-12-24', fecha_fin:'2026-12-31', motivo:'Navidades',            estado:'Aprobada',  created_at:'2026-06-01T00:00:00Z' },
-];
