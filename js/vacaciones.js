@@ -1,3 +1,4 @@
+// v2
 const DEMO_VACACIONES = [
   { id:'dv1', usuario:'agente1', nombre:'Agente 1', fecha_inicio:'2026-07-01', fecha_fin:'2026-07-14', motivo:'Vacaciones de verano', estado:'Pendiente', created_at:'2026-06-10T00:00:00Z' },
   { id:'dv2', usuario:'agente2', nombre:'Agente 2', fecha_inicio:'2026-08-01', fecha_fin:'2026-08-07', motivo:'Viaje familiar', estado:'Pendiente', created_at:'2026-06-12T00:00:00Z' },
