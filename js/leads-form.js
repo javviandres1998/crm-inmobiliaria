@@ -125,5 +125,23 @@ function pdragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
 async function pdrop(e, stage) {
   e.preventDefault();
   e.currentTarget.classList.remove('drag-over');
-  if (dragId) { await changeStage(dragId, stage); dragId = null; }
+  if (!dragId) return;
+
+  // Si es un lead demo (id empieza por 'd' y es corto), actualiza solo en memoria
+  const lead = leads.find(x => x.id == dragId);
+  if (lead && (String(dragId).startsWith('d') && String(dragId).length <= 3)) {
+    lead.estado = stage;
+    dragId = null;
+    renderPipeline();
+    renderStats();
+    return;
+  }
+
+  // Lead real: actualiza en Supabase
+  try {
+    await changeStage(dragId, stage);
+  } catch(e) {
+    toast('⚠️ Error al mover lead', '#EF4444');
+  }
+  dragId = null;
 }
