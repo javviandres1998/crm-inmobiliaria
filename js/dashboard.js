@@ -7,7 +7,11 @@ function renderDashboard() {
   const semFinS = semFin.toISOString().slice(0,10);
 
   const leadsMes = leads.filter(l => String(l.created_at||'').startsWith(mes)).length;
-  const visitasSem = visitas.filter(v => v.fecha >= semIniS && v.fecha <= semFinS).length;
+  const visitasSem = leads.filter(l => {
+  if (!l.fecha_visita) return false;
+  const fv = l.fecha_visita.slice(0,10);
+  return fv >= semIniS && fv <= semFinS;
+}).length;
   const propActivas = propiedades.filter(p => p.estado === 'Disponible').length;
   const factCobMes = facturas.filter(f => f.estado === 'Cobrada' && String(f.fecha_emision||'').startsWith(mes)).reduce((s,f)=>s+(f.total||0),0);
   const cerrados = leads.filter(l => l.estado === 'Cerrado ✓').length;
@@ -16,7 +20,11 @@ function renderDashboard() {
   const stageCounts = STAGES.slice(0,-1).map(s => ({ s, n: leads.filter(l=>l.estado===s).length }));
   const maxN = Math.max(...stageCounts.map(x=>x.n), 1);
 
-  const proxVisitas = [...visitas].filter(v=>v.fecha>=now.toISOString().slice(0,10)).slice(0,5);
+  const hoyStr = now.toISOString().slice(0,10);
+  const proxVisitas = leads
+    .filter(l => l.fecha_visita && l.fecha_visita.slice(0,10) >= hoyStr)
+    .sort((a,b) => a.fecha_visita.localeCompare(b.fecha_visita))
+    .slice(0,5);
   const ultLeads = leads.slice(0,8);
 
   document.getElementById('content').innerHTML = `
@@ -45,7 +53,12 @@ function renderDashboard() {
       <div class="dash-panel">
         <h3>Próximas 5 Visitas</h3>
         ${proxVisitas.length ? `<table class="data-table"><thead><tr><th>Fecha</th><th>Hora</th><th>Cliente</th><th>Inmueble</th></tr></thead><tbody>
-          ${proxVisitas.map(v=>`<tr><td>${esc(v.fecha||'')}</td><td>${esc(v.hora||'')}</td><td>${esc(v.cliente||'')}</td><td>${esc(v.inmueble||'')}</td></tr>`).join('')}
+          ${proxVisitas.map(l=>`<tr>
+  <td>${esc(l.fecha_visita?.slice(0,10)||'')}</td>
+  <td>${esc(l.fecha_visita?.slice(11,16)||'')}</td>
+  <td>${esc(l.nombre||'')}</td>
+  <td>${esc(l.inmueble||'')}</td>
+</tr>`).join('')}
         </tbody></table>` : '<p style="color:#94A3B8">Sin visitas próximas</p>'}
       </div>
     </div>
